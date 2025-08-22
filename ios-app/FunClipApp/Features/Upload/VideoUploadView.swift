@@ -128,6 +128,22 @@ struct VideoUploadView: View {
             } message: {
                 Text(errorMessage)
             }
+            .sheet(isPresented: $showingProcessingView) {
+                if let jobId = currentJobId {
+                    ProcessingStatusView(
+                        jobId: jobId,
+                        onComplete: { clips in
+                            // Handle completed clips
+                            print("Processing complete with \(clips.count) clips")
+                            // Navigate to results view
+                        },
+                        onError: { error in
+                            errorMessage = error
+                            showError = true
+                        }
+                    )
+                }
+            }
         }
     }
     
@@ -158,12 +174,27 @@ struct VideoUploadView: View {
         }
     }
     
+    @State private var showingProcessingView = false
+    @State private var currentJobId: String?
+    @StateObject private var historyService = ProcessingHistoryService()
+    
     private func uploadVideo() {
         Task {
             do {
                 let response = try await videoService.uploadVideo(to: "videos/upload")
+                
+                // Create processing job
+                let job = ProcessingJob(
+                    id: response.jobId,
+                    videoSource: .upload(fileName: videoService.selectedVideoURL?.lastPathComponent ?? "video.mp4"),
+                    status: .processing
+                )
+                historyService.addJob(job)
+                
                 // Navigate to processing view
-                print("Upload successful: \(response.jobId)")
+                currentJobId = response.jobId
+                showingProcessingView = true
+                
             } catch {
                 errorMessage = error.localizedDescription
                 showError = true
