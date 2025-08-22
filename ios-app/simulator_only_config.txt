@@ -1,0 +1,12 @@
+To run in Simulator without any signing:
+
+1. In Xcode → Signing & Capabilities:
+   - UNCHECK "Automatically manage signing"
+   - Team: Set to "None"
+   - Signing Certificate: None
+
+2. Make sure iPhone Simulator is selected (not a real device)
+
+3. Press ⌘+R to run
+
+This bypasses all signing requirements\!

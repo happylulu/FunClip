@@ -1,0 +1,9 @@
+// Add these settings to disable code signing for simulator:
+// In the Debug configuration section, add:
+
+CODE_SIGNING_REQUIRED = NO;
+CODE_SIGNING_ALLOWED = NO;
+CODE_SIGN_IDENTITY = "";
+CODE_SIGN_ENTITLEMENTS = "";
+DEVELOPMENT_TEAM = "";
+PROVISIONING_PROFILE_SPECIFIER = "";
